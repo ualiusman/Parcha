@@ -43,6 +43,8 @@
     <Content Include="ClientApp\src\app\components\about\about.component.html" />
     <Content Include="ClientApp\src\app\components\login\login.component.html" />
     <Content Include="ClientApp\src\app\components\pagenotfound\pagenotfound.component.html" />
+    <Content Include="ClientApp\src\app\components\quiz\quiz-edit.component.html" />
+    <Content Include="ClientApp\src\app\components\quiz\quiz-edit.component.css" />
     <Content Include="ClientApp\src\app\components\quiz\quiz-list.component.css" />
     <Content Include="ClientApp\src\app\components\quiz\quiz-list.component.html" />
     <Content Include="ClientApp\src\app\components\quiz\quiz.component.css" />
@@ -77,6 +79,7 @@
     <TypeScriptCompile Include="ClientApp\src\app\components\about\about.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\components\login\login.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\components\pagenotfound\pagenotfound.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\quiz\quiz-edit.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\components\quiz\quiz-list.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\components\quiz\quiz.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\home\home.component.ts" />

@@ -10,6 +10,8 @@ import { HomeComponent } from './home/home.component';
 
 import { QuizListComponent } from './components/quiz/quiz-list.component';
 import { QuizComponent } from './components/quiz/quiz.component';
+import { QuizEditComponent } from './components/quiz/quiz-edit.component';
+
 import { LoginComponent } from './components/login/login.component';
 import { AboutComponent } from './components/about/about.component';
 import { PageNotFoundComponent } from './components/pagenotfound/pagenotfound.component';
@@ -21,6 +23,8 @@ import { PageNotFoundComponent } from './components/pagenotfound/pagenotfound.co
     HomeComponent,
     QuizListComponent,
     QuizComponent,
+    QuizEditComponent,
+
     LoginComponent,
     AboutComponent,
     PageNotFoundComponent
@@ -35,6 +39,9 @@ import { PageNotFoundComponent } from './components/pagenotfound/pagenotfound.co
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'quiz/:id', component: QuizComponent },
+      { path: 'quiz/create', component: QuizEditComponent },
+      { path: 'quiz/edit/:id', component: QuizEditComponent },
+
       { path: 'login', component: LoginComponent },
       { path: 'about', component: AboutComponent },
       { path: '**', component: PageNotFoundComponent }
