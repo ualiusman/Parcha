@@ -69,7 +69,8 @@ namespace Parcha.Controllers
             DbContext.SaveChanges();
 
 
-            return new JsonResult(quiz.Adapt<QuizViewModel>(),
+            //return new JsonResult(quiz.Adapt<QuizViewModel>(),
+            return new JsonResult(quiz,
             new JsonSerializerSettings()
             {
                 Formatting = Formatting.Indented

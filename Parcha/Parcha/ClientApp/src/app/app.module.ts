@@ -38,8 +38,8 @@ import { PageNotFoundComponent } from './components/pagenotfound/pagenotfound.co
     FormsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
-      { path: 'quiz/:id', component: QuizComponent },
       { path: 'quiz/create', component: QuizEditComponent },
+      { path: 'quiz/:id', component: QuizComponent },
       { path: 'quiz/edit/:id', component: QuizEditComponent },
 
       { path: 'login', component: LoginComponent },
