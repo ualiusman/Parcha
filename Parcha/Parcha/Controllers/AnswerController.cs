@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Mapster;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Parcha.Data;
+using Parcha.Data.Models;
 using Parcha.ViewModels;
 
 namespace Parcha.Controllers
@@ -13,30 +16,97 @@ namespace Parcha.Controllers
     [ApiController]
     public class AnswerController : ControllerBase
     {
+        #region Private Fields
+        private ApplicationDbContext DbContext;
+        #endregion
+        #region Constructor
+        public AnswerController(ApplicationDbContext context)
+        {
+            DbContext = context;
+        }
+        #endregion
 
         [HttpGet]
         public IActionResult Get(int id)
         {
-            throw new NotImplementedException();
+            var answer = DbContext.Answers.Where(i => i.Id == id).FirstOrDefault();
+            if (answer == null)
+            {
+                return NotFound(new
+                {
+                    Error = String.Format("Answer ID {0} has not been found", id)
+                });
+            }
+            return new JsonResult(
+            answer.Adapt<AnswerViewModel>(),
+            new JsonSerializerSettings()
+            {
+                Formatting = Formatting.Indented
+            });
         }
 
 
         [HttpPut]
-        public IActionResult Put(AnswerViewModel m)
+        public IActionResult Put([FromBody]AnswerViewModel model)
         {
-            throw new NotImplementedException();
+            if (model == null) return new StatusCodeResult(500);
+            var answer = model.Adapt<Answer>();
+            answer.QuestionId = model.QuestionId;
+            answer.Text = model.Text;
+            answer.Notes = model.Notes;
+            answer.CreatedDate = DateTime.Now;
+            answer.LastModifiedDate = answer.CreatedDate;
+            DbContext.Answers.Add(answer);
+            DbContext.SaveChanges();
+
+            return new JsonResult(answer.Adapt<AnswerViewModel>(),
+            new JsonSerializerSettings()
+            {
+                Formatting = Formatting.Indented
+            });
         }
 
         [HttpPost]
-        public IActionResult Post(AnswerViewModel m)
+        public IActionResult Post([FromBody]AnswerViewModel model)
         {
-            throw new NotImplementedException();
+            if (model == null) return new StatusCodeResult(500);
+            var answer = DbContext.Answers.Where(q => q.Id == model.Id).FirstOrDefault();
+            if (answer == null)
+            {
+                return NotFound(new
+                {
+                    Error = String.Format("Answer ID {0} has not been found", model.Id)
+                });
+            }
+            answer.QuestionId = model.QuestionId;
+            answer.Text = model.Text;
+            answer.Value = model.Value;
+            answer.Notes = model.Notes;
+            answer.LastModifiedDate = answer.CreatedDate;
+            DbContext.SaveChanges();
+
+            return new JsonResult(answer.Adapt<AnswerViewModel>(),
+            new JsonSerializerSettings()
+            {
+                Formatting = Formatting.Indented
+            });
         }
 
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            throw new NotImplementedException();
+            var answer = DbContext.Answers.Where(i => i.Id == id)
+            .FirstOrDefault();
+            if (answer == null)
+            {
+                return NotFound(new
+                {
+                    Error = String.Format("Answer ID {0} has not been  found", id)
+                });
+            }
+            DbContext.Answers.Remove(answer);
+            DbContext.SaveChanges();
+            return new OkResult();
         }
 
 
@@ -44,31 +114,11 @@ namespace Parcha.Controllers
         [HttpGet("All/{questionId}")]
         public IActionResult All(int questionId)
         {
-            var sampleAnswers = new List<AnswerViewModel>();
-            // add a first sample answer
-            sampleAnswers.Add(new AnswerViewModel()
-            {
-                Id = 1,
-                QuestionId = questionId,
-                Text = "Friends and family",
-                CreatedDate = DateTime.Now,
-                LastModifiedDate = DateTime.Now
-            });
-            // add a bunch of other sample answers
-            for (int i = 2; i <= 5; i++)
-            {
-                sampleAnswers.Add(new AnswerViewModel()
-                {
-                    Id = i,
-                    QuestionId = questionId,
-                    Text = String.Format("Sample Answer {0}", i),
-                    CreatedDate = DateTime.Now,
-                    LastModifiedDate = DateTime.Now
-                });
-            }
-            // output the result in JSON format
+            var answers = DbContext.Answers
+ .Where(q => q.QuestionId == questionId)
+ .ToArray();
             return new JsonResult(
-            sampleAnswers,
+            answers.Adapt<AnswerViewModel[]>(),
             new JsonSerializerSettings()
             {
                 Formatting = Formatting.Indented
