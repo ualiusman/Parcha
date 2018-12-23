@@ -12,17 +12,15 @@ using Parcha.ViewModels;
 
 namespace Parcha.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    public class AnswerController : ControllerBase
+    public class AnswerController : BaseApiController
     {
         #region Private Fields
-        private ApplicationDbContext DbContext;
         #endregion
         #region Constructor
         public AnswerController(ApplicationDbContext context)
+            :base(context)
         {
-            DbContext = context;
         }
         #endregion
 
@@ -39,10 +37,7 @@ namespace Parcha.Controllers
             }
             return new JsonResult(
             answer.Adapt<AnswerViewModel>(),
-            new JsonSerializerSettings()
-            {
-                Formatting = Formatting.Indented
-            });
+            JsonSettings);
         }
 
 
@@ -60,10 +55,7 @@ namespace Parcha.Controllers
             DbContext.SaveChanges();
 
             return new JsonResult(answer.Adapt<AnswerViewModel>(),
-            new JsonSerializerSettings()
-            {
-                Formatting = Formatting.Indented
-            });
+            JsonSettings);
         }
 
         [HttpPost]
@@ -86,10 +78,7 @@ namespace Parcha.Controllers
             DbContext.SaveChanges();
 
             return new JsonResult(answer.Adapt<AnswerViewModel>(),
-            new JsonSerializerSettings()
-            {
-                Formatting = Formatting.Indented
-            });
+            JsonSettings);
         }
 
         [HttpDelete("{id}")]
@@ -119,10 +108,7 @@ namespace Parcha.Controllers
  .ToArray();
             return new JsonResult(
             answers.Adapt<AnswerViewModel[]>(),
-            new JsonSerializerSettings()
-            {
-                Formatting = Formatting.Indented
-            });
+            JsonSettings);
 
         }
     }

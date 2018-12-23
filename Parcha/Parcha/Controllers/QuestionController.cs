@@ -12,23 +12,20 @@ using Parcha.ViewModels;
 
 namespace Parcha.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    public class QuestionController : ControllerBase
+    public class QuestionController : BaseApiController
     {
         #region Private Fields
-        private ApplicationDbContext DbContext;
         #endregion
         #region Constructor
         public QuestionController(ApplicationDbContext context)
+            :base(context)
         {
-            // Instantiate the ApplicationDbContext through DI
-            DbContext = context;
         }
         #endregion
 
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
             var question = DbContext.Questions.Where(i => i.Id == id)
@@ -43,10 +40,7 @@ namespace Parcha.Controllers
             }
             return new JsonResult(
                 question,
-            new JsonSerializerSettings()
-            {
-                Formatting = Formatting.Indented
-            });
+            JsonSettings);
         }
 
 
@@ -72,10 +66,7 @@ namespace Parcha.Controllers
             DbContext.SaveChanges();
             // return the newly-created Question to the client.
             return new JsonResult(question.Adapt<QuestionViewModel>(),
-            new JsonSerializerSettings()
-            {
-                Formatting = Formatting.Indented
-            });
+            JsonSettings);
         }
 
         [HttpPost]
@@ -97,10 +88,7 @@ namespace Parcha.Controllers
             question.LastModifiedDate = question.CreatedDate;
             DbContext.SaveChanges();
             return new JsonResult(question.Adapt<QuestionViewModel>(),
-            new JsonSerializerSettings()
-            {
-                Formatting = Formatting.Indented
-            });
+            JsonSettings);
         }
 
 
@@ -111,11 +99,10 @@ namespace Parcha.Controllers
             var questions = DbContext.Questions.Where(q => q.QuizId == quizId).ToArray();
             return new JsonResult(
             questions.Adapt<QuestionViewModel[]>(),
-            new JsonSerializerSettings()
-            {
-                Formatting = Formatting.Indented
-            });
+            JsonSettings);
         }
+
+        [HttpDelete("{id}")]
 
         public IActionResult Delete(int id)
         {

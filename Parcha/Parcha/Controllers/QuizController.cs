@@ -12,19 +12,17 @@ using Parcha.ViewModels;
 
 namespace Parcha.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    public class QuizController : ControllerBase
+    public class QuizController : BaseApiController
     {
 
 
         #region Private Fields
-        private ApplicationDbContext DbContext;
         #endregion
         #region Constructor
         public QuizController(ApplicationDbContext context)
+            :base(context)
         {
-            DbContext = context;
         }
         #endregion Constructor
 
@@ -45,10 +43,7 @@ namespace Parcha.Controllers
             }
             return new JsonResult(
             quiz,
-            new JsonSerializerSettings()
-            {
-                Formatting = Formatting.Indented
-            });
+            JsonSettings);
         }
 
 
@@ -71,10 +66,7 @@ namespace Parcha.Controllers
 
             //return new JsonResult(quiz.Adapt<QuizViewModel>(),
             return new JsonResult(quiz,
-            new JsonSerializerSettings()
-            {
-                Formatting = Formatting.Indented
-            });
+           JsonSettings);
         }
 
         [HttpPost]
@@ -98,10 +90,7 @@ namespace Parcha.Controllers
             quiz.LastModifiedDate = quiz.CreatedDate;
             DbContext.SaveChanges();
             return new JsonResult(quiz.Adapt<QuizViewModel>(),
-            new JsonSerializerSettings()
-            {
-                Formatting = Formatting.Indented
-            });
+            JsonSettings);
         }
 
         [HttpDelete("{id}")]
@@ -132,10 +121,7 @@ namespace Parcha.Controllers
 
             //var j = latest.Adapt<QuizViewModel[]>();
             return new JsonResult(
-            latest, new JsonSerializerSettings()
-            {
-                Formatting = Formatting.Indented
-            });
+            latest, JsonSettings);
         }
 
 
@@ -149,10 +135,7 @@ namespace Parcha.Controllers
             //var j = byTitle.Adapt<QuizViewModel[]>();
             return new JsonResult(
             byTitle,
-                new JsonSerializerSettings()
-                {
-                    Formatting = Formatting.Indented
-                });
+                JsonSettings);
         }
 
         [HttpGet("Random/{num:int?}")]
@@ -164,10 +147,7 @@ namespace Parcha.Controllers
                  .ToArray();
             return new JsonResult(
             random,
-                new JsonSerializerSettings()
-                {
-                    Formatting = Formatting.Indented
-                });
+                JsonSettings);
         }
     }
 }

@@ -12,22 +12,19 @@ using Parcha.ViewModels;
 
 namespace Parcha.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
-    public class ResultController : ControllerBase
+    public class ResultController : BaseApiController
     {
         #region Private Fields
-        private ApplicationDbContext DbContext;
         #endregion
         #region Constructor
         public ResultController(ApplicationDbContext context)
+            :base(context)
         {
-            // Instantiate the ApplicationDbContext through DI
-            DbContext = context;
         }
         #endregion
 
-        [HttpGet]
+        [HttpGet("{id}")]
         public IActionResult Get(int id)
         {
             var result = DbContext.Results.Where(i => i.Id == id)
@@ -42,10 +39,7 @@ namespace Parcha.Controllers
             }
             return new JsonResult(
             result.Adapt<ResultViewModel>(),
-            new JsonSerializerSettings()
-            {
-                Formatting = Formatting.Indented
-            });
+            JsonSettings);
         }
 
 
@@ -60,10 +54,7 @@ namespace Parcha.Controllers
             DbContext.Results.Add(result);
             DbContext.SaveChanges();
             return new JsonResult(result.Adapt<ResultViewModel>(),
-            new JsonSerializerSettings()
-            {
-                Formatting = Formatting.Indented
-            });
+            JsonSettings);
         }
 
         [HttpPost]
@@ -91,10 +82,7 @@ namespace Parcha.Controllers
             result.LastModifiedDate = result.CreatedDate;
             DbContext.SaveChanges();
             return new JsonResult(result.Adapt<ResultViewModel>(),
-            new JsonSerializerSettings()
-            {
-                Formatting = Formatting.Indented
-            });
+            JsonSettings);
         }
 
         [HttpDelete("{id}")]
@@ -122,10 +110,7 @@ namespace Parcha.Controllers
   .ToArray();
             return new JsonResult(
             results.Adapt<ResultViewModel[]>(),
-            new JsonSerializerSettings()
-            {
-                Formatting = Formatting.Indented
-            });
+            JsonSettings);
 
         }
     }
