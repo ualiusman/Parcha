@@ -11,6 +11,7 @@ import { HomeComponent } from './home/home.component';
 import { QuizListComponent } from './components/quiz/quiz-list.component';
 import { QuizComponent } from './components/quiz/quiz.component';
 import { QuizEditComponent } from './components/quiz/quiz-edit.component';
+import { QuizSearchComponent } from './components/quiz/quiz-search.component';
 
 import { QuestionListComponent } from './components/question/question-list.component';import { QuestionEditComponent } from './components/question/question-edit.component';
 import { AnswerListComponent } from './components/answer/answer-list.component';
@@ -31,6 +32,7 @@ import { PageNotFoundComponent } from './components/pagenotfound/pagenotfound.co
     QuizListComponent,
     QuizComponent,
     QuizEditComponent,
+    QuizSearchComponent,
 
     QuestionListComponent,
     QuestionEditComponent,
@@ -57,6 +59,7 @@ import { PageNotFoundComponent } from './components/pagenotfound/pagenotfound.co
       { path: 'quiz/create', component: QuizEditComponent },
       { path: 'quiz/:id', component: QuizComponent },
       { path: 'quiz/edit/:id', component: QuizEditComponent },
+
 
       { path: 'question/create/:id', component: QuestionEditComponent },
       { path: 'question/edit/:id', component: QuestionEditComponent },
