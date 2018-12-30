@@ -4,7 +4,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Mapster;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using Parcha.Data;
 using Parcha.Data.Models;
@@ -20,8 +22,12 @@ namespace Parcha.Controllers
         #region Private Fields
         #endregion
         #region Constructor
-        public QuizController(ApplicationDbContext context)
-            :base(context)
+        public QuizController(
+            ApplicationDbContext context,
+            RoleManager<IdentityRole> roleManager,
+            UserManager<ApplicationUser> userManager,
+            IConfiguration configuration)
+            : base(context,roleManager,userManager,configuration)
         {
         }
         #endregion Constructor

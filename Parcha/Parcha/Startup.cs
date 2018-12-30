@@ -5,7 +5,13 @@ using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Identity;
 using Parcha.Data;
+using Parcha.Data.Models;
+using Microsoft.IdentityModel.Tokens;
+using System;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace Parcha
 {
@@ -28,6 +34,52 @@ namespace Parcha
             // Add ApplicationDbContext.
             services.AddDbContext<ApplicationDbContext>(options =>
            options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
+
+            #region Identity
+            // Add ASP.NET Identity support
+            services.AddIdentity<ApplicationUser, IdentityRole>(
+            opts =>
+            {
+                opts.Password.RequireDigit = true;
+                opts.Password.RequireLowercase = true;
+                opts.Password.RequireUppercase = true;
+                opts.Password.RequireNonAlphanumeric = false;
+                opts.Password.RequiredLength = 7;
+            })
+            .AddEntityFrameworkStores<ApplicationDbContext>();
+            #endregion
+
+
+            #region JWT
+            // Add Authentication with JWT Tokens
+            services.AddAuthentication(opts =>
+            {
+                opts.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                opts.DefaultAuthenticateScheme =
+               JwtBearerDefaults.AuthenticationScheme;
+                opts.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(cfg =>
+            {
+                cfg.RequireHttpsMetadata = false;
+                cfg.SaveToken = true;
+                cfg.TokenValidationParameters = new TokenValidationParameters()
+                {
+        // standard configuration
+        ValidIssuer = Configuration["Auth:Jwt:Issuer"],
+                    ValidAudience = Configuration["Auth:Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(Configuration["Auth:Jwt:Key"])),
+                    ClockSkew = TimeSpan.Zero,
+                    // security switches
+                    RequireExpirationTime = true,
+                    ValidateIssuer = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidateAudience = true
+                };
+            });
+            #endregion  
 
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
@@ -57,9 +109,13 @@ namespace Parcha
                 var dbContext =
                 serviceScope.ServiceProvider.GetService<ApplicationDbContext>();
                 // Create the Db if it doesn't exist and applies any pending  migration.
+
+                var roleManager = serviceScope.ServiceProvider.GetService<RoleManager<IdentityRole>>();
+                var userManager = serviceScope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
+
                 dbContext.Database.Migrate();
                 // Seed the Db.
-                DbSeeder.Seed(dbContext);
+                DbSeeder.Seed(dbContext, roleManager, userManager);
 
 
             }
@@ -67,6 +123,8 @@ namespace Parcha
             app.UseStaticFiles();
             app.UseSpaStaticFiles();
 
+            // Add the AuthenticationMiddleware to the pipeline
+            app.UseAuthentication();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(
