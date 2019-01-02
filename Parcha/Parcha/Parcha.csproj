@@ -45,6 +45,7 @@
     <Content Include="ClientApp\src\app\components\answer\answer-list.component.html" />
     <Content Include="ClientApp\src\app\components\answer\answer-edit.component.css" />
     <Content Include="ClientApp\src\app\components\answer\answer-edit.component.html" />
+    <Content Include="ClientApp\src\app\components\login\login.component.css" />
     <Content Include="ClientApp\src\app\components\login\login.component.html" />
     <Content Include="ClientApp\src\app\components\pagenotfound\pagenotfound.component.html" />
     <Content Include="ClientApp\src\app\components\question\question-edit.component.css" />
@@ -104,11 +105,13 @@
     <TypeScriptCompile Include="ClientApp\src\app\components\result\result-edit.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\components\result\result-list.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\home\home.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\interfaces\token.response.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\result.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\answer.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\question.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\quiz.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\nav-menu\nav-menu.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\auth.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\environments\environment.prod.ts" />
     <TypeScriptCompile Include="ClientApp\src\environments\environment.ts" />
     <TypeScriptCompile Include="ClientApp\src\main.ts" />
