@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -54,6 +56,7 @@ namespace Parcha.Controllers
 
 
         [HttpPut]
+        [Authorize]
         public IActionResult Put([FromBody] QuizViewModel model)
         {
             if (model == null) return new StatusCodeResult(500);
@@ -64,8 +67,7 @@ namespace Parcha.Controllers
             quiz.Notes = model.Notes;
             quiz.CreatedDate = DateTime.Now;
             quiz.LastModifiedDate = quiz.CreatedDate;
-            quiz.UserId = DbContext.Users.Where(u => u.UserName == "Admin")
-            .FirstOrDefault().Id;
+            quiz.UserId = User.FindFirst(ClaimTypes.NameIdentifier).Value;
             DbContext.Quizzes.Add(quiz);
             DbContext.SaveChanges();
 
@@ -76,6 +78,7 @@ namespace Parcha.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Post(QuizViewModel model)
         {
             if (model == null) return new StatusCodeResult(500);
@@ -100,6 +103,7 @@ namespace Parcha.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize]
         public IActionResult Delete(int id)
         {
             var quiz = DbContext.Quizzes.Where(i => i.Id == id)

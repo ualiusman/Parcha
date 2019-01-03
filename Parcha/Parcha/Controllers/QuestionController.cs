@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -52,6 +53,7 @@ namespace Parcha.Controllers
 
 
         [HttpPut]
+        [Authorize]
         public IActionResult Put([FromBody] QuestionViewModel model)
         {
             // return a generic HTTP Status 500 (Server Error)
@@ -77,6 +79,7 @@ namespace Parcha.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         public IActionResult Post([FromBody]QuestionViewModel model)
         {
             if (model == null) return new StatusCodeResult(500);
@@ -110,7 +113,7 @@ namespace Parcha.Controllers
         }
 
         [HttpDelete("{id}")]
-
+        [Authorize]
         public IActionResult Delete(int id)
         {
             var question = DbContext.Questions.Where(i => i.Id == id)
