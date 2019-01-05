@@ -47,6 +47,8 @@ namespace Parcha.Controllers
             {
                 case "password":
                     return await GetToken(model);
+                case "refresh_token":
+                    return await RefreshToken(model);
                 default:
                     // not supported - return a HTTP 401 (Unauthorized)
                     return new UnauthorizedResult();
@@ -56,7 +58,7 @@ namespace Parcha.Controllers
 
 
 
-        private async Task<IActionResult>GetToken(TokenRequestViewModel model)
+        private async Task<IActionResult> GetToken(TokenRequestViewModel model)
         {
             try
             {
@@ -75,45 +77,53 @@ namespace Parcha.Controllers
                     // user does not exists or password mismatch
                     return new UnauthorizedResult();
                 }
-                // username & password matches: create and return the Jwt token.
-                DateTime now = DateTime.UtcNow;
-                // add the registered claims for JWT (RFC7519).
-                // For more info, see
-                //https://tools.ietf.org/html/rfc7519#section-4.1
-                var claims = new[] {
-                             new Claim(JwtRegisteredClaimNames.Sub, user.Id),
-                             new Claim(JwtRegisteredClaimNames.Jti,
-                             Guid.NewGuid().ToString()),
-                             new Claim(JwtRegisteredClaimNames.Iat,
-                             new
-                             DateTimeOffset(now).ToUnixTimeSeconds().ToString())
-                        // TODO: add additional claims here
- };
-                var tokenExpirationMins =
-                Configuration.GetValue<int>
-                ("Auth:Jwt:TokenExpirationInMinutes");
-                var issuerSigningKey = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(Configuration["Auth:Jwt:Key"]));
-                var token = new JwtSecurityToken(
-                issuer: Configuration["Auth:Jwt:Issuer"],
-                audience: Configuration["Auth:Jwt:Audience"],
-                claims: claims,
-                notBefore: now,
-                expires:
-                now.Add(TimeSpan.FromMinutes(tokenExpirationMins)),
-                signingCredentials: new SigningCredentials(
-                issuerSigningKey,
-                SecurityAlgorithms.HmacSha256)
-                );
+                // username & password matches: create the refresh token
+                var rt = CreateRefreshToken(model.client_id, user.Id);
+                // add the new refresh token to the DB
+                DbContext.Tokens.Add(rt);
+                DbContext.SaveChanges();
+                // create & return the access token
+                var t = CreateAccessToken(user.Id, rt.Value);
+                return Ok(t);
+            }
+            catch (Exception ex)
+            {
+                return new UnauthorizedResult();
+            }
+        }
 
-                var encodedToken = new
-                JwtSecurityTokenHandler().WriteToken(token);
-                // build & return the response
-                var response = new TokenResponseViewModel()
+
+
+        private async Task<IActionResult> RefreshToken(TokenRequestViewModel model)
+        {
+            try
+            {
+                // check if the received refreshToken exists for the given
+                //clientId
+                var rt = DbContext.Tokens.FirstOrDefault(t => t.ClientId == model.client_id && t.Value == model.refresh_token);
+                if (rt == null)
                 {
-                    token = encodedToken,
-                    expiration = tokenExpirationMins
-                };
+                    // refresh token not found or invalid (or invalid clientId)
+                    return new UnauthorizedResult();
+                }
+                // check if there's an user with the refresh token's userId
+                var user = await UserManager.FindByIdAsync(rt.UserId);
+                if (user == null)
+                {
+                    // UserId not found or invalid
+                    return new UnauthorizedResult();
+                }
+                // generate a new refresh token
+                var rtNew = CreateRefreshToken(rt.ClientId, rt.UserId);
+                // invalidate the old refresh token (by deleting it)
+                DbContext.Tokens.Remove(rt);
+                // add the new refresh token
+                DbContext.Tokens.Add(rtNew);
+                // persist changes in the DB
+                DbContext.SaveChanges();
+                // create a new access token...
+                var response = CreateAccessToken(rtNew.UserId, rtNew.Value);
+                // ... and send it to the client
                 return Ok(response);
             }
             catch (Exception ex)
@@ -121,6 +131,58 @@ namespace Parcha.Controllers
                 return new UnauthorizedResult();
             }
         }
+
+        private Token CreateRefreshToken(string clientId, string userId)
+        {
+            return new Token()
+            {
+                ClientId = clientId,
+                UserId = userId,
+                Type = 0,
+                Value = Guid.NewGuid().ToString("N"),
+                CreatedDate = DateTime.UtcNow
+            };
+        }
+
+
+        private TokenResponseViewModel CreateAccessToken(string userId, string
+refreshToken)
+        {
+            DateTime now = DateTime.UtcNow;
+            // add the registered claims for JWT (RFC7519).
+            // For more info, see https://tools.ietf.org/html/rfc7519#section-4.1
+            var claims = new[] {
+                                 new Claim(JwtRegisteredClaimNames.Sub, userId),
+                                 new Claim(JwtRegisteredClaimNames.Jti,
+                                 Guid.NewGuid().ToString()),
+                                 new Claim(JwtRegisteredClaimNames.Iat,
+                                 new DateTimeOffset(now).ToUnixTimeSeconds().ToString())
+                                 // TODO: add additional claims here
+                                 };
+            var tokenExpirationMins =
+            Configuration.GetValue<int>
+            ("Auth:Jwt:TokenExpirationInMinutes");
+            var issuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(Configuration["Auth:Jwt:Key"]));
+            var token = new JwtSecurityToken(
+            issuer: Configuration["Auth:Jwt:Issuer"],
+            audience: Configuration["Auth:Jwt:Audience"],
+            claims: claims,
+            notBefore: now,
+            expires: now.Add(TimeSpan.FromMinutes(tokenExpirationMins)),
+            signingCredentials: new SigningCredentials(
+            issuerSigningKey, SecurityAlgorithms.HmacSha256)
+            );
+            var encodedToken = new JwtSecurityTokenHandler().WriteToken(token);
+            return new TokenResponseViewModel()
+            {
+                token = encodedToken,
+                expiration = tokenExpirationMins,
+                refresh_token = refreshToken
+            };
+        }
+
     }
 }
+
 
