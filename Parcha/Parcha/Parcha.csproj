@@ -112,6 +112,7 @@
     <TypeScriptCompile Include="ClientApp\src\app\interfaces\quiz.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\nav-menu\nav-menu.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\auth.interceptor.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\services\auth.response.interceptor.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\services\auth.service.ts" />
     <TypeScriptCompile Include="ClientApp\src\environments\environment.prod.ts" />
     <TypeScriptCompile Include="ClientApp\src\environments\environment.ts" />
