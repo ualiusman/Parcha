@@ -25,6 +25,7 @@ import { ResultListComponent } from './components/result/result-list.component';
 import { ResultEditComponent } from './components/result/result-edit.component';
 
 import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/user/register.component';
 import { AboutComponent } from './components/about/about.component';
 import { PageNotFoundComponent } from './components/pagenotfound/pagenotfound.component';
 
@@ -48,6 +49,7 @@ import { PageNotFoundComponent } from './components/pagenotfound/pagenotfound.co
     ResultEditComponent,
 
     LoginComponent,
+    RegisterComponent,
     AboutComponent,
     PageNotFoundComponent
     //PageNotFoundComponent,
@@ -80,6 +82,7 @@ import { PageNotFoundComponent } from './components/pagenotfound/pagenotfound.co
       },
 
       { path: 'login', component: LoginComponent },
+      { path: 'register', component: RegisterComponent },
       { path: 'about', component: AboutComponent },
       { path: '**', component: PageNotFoundComponent }
       //{ path: 'counter', component: CounterComponent },

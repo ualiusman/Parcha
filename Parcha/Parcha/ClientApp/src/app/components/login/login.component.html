@@ -17,8 +17,7 @@
              class="form-control"
              placeholder="Username or Email address" />
       <span *ngIf="hasError('Username')"
-            class="glyphicon glyphicon-remove form-control-
- feedback"
+            class="glyphicon glyphicon-remove form-control-feedback"
             aria-hidden="true"></span>
       <div *ngIf="hasError('Username')"
            class="help-block">
@@ -33,8 +32,7 @@
              class="form-control"
              placeholder="Password" />
       <span *ngIf="hasError('Password')"
-            class="glyphicon glyphicon-remove form-control-
- feedback"
+            class="glyphicon glyphicon-remove form-control-feedback"
             aria-hidden="true"></span>
       <div *ngIf="hasError('Password')"
            class="help-block">
@@ -58,4 +56,10 @@
       Forgot the password?
     </a>
   </div>
+  <div class="login-link">
+    <a [routerLink]="['/register']">
+      Don't have an account? Click here to create one!
+    </a>
+  </div>
+
 </div>
