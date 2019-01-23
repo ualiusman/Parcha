@@ -40,7 +40,7 @@ export class RegisterComponent {
     tempUser.Email = this.form.value.Email;
     tempUser.Password = this.form.value.Password;
     tempUser.DisplayName = this.form.value.DisplayName;
-    var url = this.baseUrl + "api/user/Add";
+    var url = this.baseUrl + "api/user";
     this.http
       .put<User>(url, tempUser)
       .subscribe(res => {

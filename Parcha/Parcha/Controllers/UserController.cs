@@ -30,18 +30,15 @@ namespace Parcha.Controllers
         #endregion
 
         #region RESTful Conventions
- /// <summary>
- /// POST: api/user
- /// </summary>
- /// <returns>Creates a new User and return it accordingly.
- ///</returns>
- [HttpPut]
-        public async Task<IActionResult> Add([FromBody]UserViewModel model)
+        /// <summary>
+        /// POST: api/user
+        /// </summary>
+        /// <returns>Creates a new User and return it accordingly.
+        ///</returns>
+        [HttpPut]
+        public async Task<IActionResult> Put([FromBody]UserViewModel model)
         {
-            // return a generic HTTP Status 500 (Server Error)
-            // if the client payload is invalid.
             if (model == null) return new StatusCodeResult(500);
-            // check if the Username/Email already exists
             ApplicationUser user = await
             UserManager.FindByNameAsync(model.UserName);
             if (user != null) return BadRequest("Username already exists");

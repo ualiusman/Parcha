@@ -63,6 +63,7 @@ import { PageNotFoundComponent } from './components/pagenotfound/pagenotfound.co
     ReactiveFormsModule,
     RouterModule.forRoot([
       { path: '', component: HomeComponent, pathMatch: 'full' },
+      { path: 'home', component: HomeComponent, },
       { path: 'quiz/create', component: QuizEditComponent },
       { path: 'quiz/:id', component: QuizComponent },
       { path: 'quiz/edit/:id', component: QuizEditComponent },
