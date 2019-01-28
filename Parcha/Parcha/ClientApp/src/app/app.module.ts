@@ -26,6 +26,8 @@ import { ResultEditComponent } from './components/result/result-edit.component';
 
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/user/register.component';
+import { UserMenuComponent } from './components/user/user-menu.component';
+
 import { AboutComponent } from './components/about/about.component';
 import { PageNotFoundComponent } from './components/pagenotfound/pagenotfound.component';
 
@@ -50,6 +52,8 @@ import { PageNotFoundComponent } from './components/pagenotfound/pagenotfound.co
 
     LoginComponent,
     RegisterComponent,
+    UserMenuComponent,
+
     AboutComponent,
     PageNotFoundComponent
     //PageNotFoundComponent,

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Mapster;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -17,6 +18,7 @@ namespace Parcha.Controllers
     [ApiController]
     public class UserController : BaseApiController
     {
+        private UserManager<ApplicationUser> userManager;
         #region Constructor
         public UserController(
         ApplicationDbContext context,
@@ -26,6 +28,7 @@ namespace Parcha.Controllers
         )
         : base(context, roleManager, userManager, configuration)
         {
+            this.userManager = userManager;
         }
         #endregion
 
@@ -68,6 +71,13 @@ namespace Parcha.Controllers
             DbContext.SaveChanges();
             // return the newly-created User to the client.
             return new JsonResult(user.Adapt<UserViewModel>(),JsonSettings);
+        }
+
+        [HttpGet]
+        public IActionResult Get()
+        {
+            return new JsonResult("Furqan", JsonSettings);
+
         }
         #endregion
     }
