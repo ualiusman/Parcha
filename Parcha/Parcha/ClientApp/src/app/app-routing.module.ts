@@ -1,8 +1,11 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-import { FormsModule,ReactiveFormsModule } from '@angular/forms';
+import { RouterModule, Routes } from '@angular/router';
+import { ModuleWithProviders } from "@angular/core";
+
+
+import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
 import { AuthService } from './services/auth.service';
@@ -30,57 +33,36 @@ import { UserMenuComponent } from './components/user/user-menu.component';
 
 import { AboutComponent } from './components/about/about.component';
 import { PageNotFoundComponent } from './components/pagenotfound/pagenotfound.component';
-import { AppRoutingModule } from "./app-routing.module";
 
-@NgModule({
-  declarations: [
-    AppComponent,
-    NavMenuComponent,
-    HomeComponent,
-    QuizListComponent,
-    QuizComponent,
-    QuizEditComponent,
-    QuizSearchComponent,
+const routes: Routes = [
+  { path: '', component: HomeComponent, pathMatch: 'full' },
+  { path: 'home', component: HomeComponent, },
+  { path: 'quiz/create', component: QuizEditComponent },
+  { path: 'quiz/:id', component: QuizComponent },
+  { path: 'quiz/edit/:id', component: QuizEditComponent },
 
-    QuestionListComponent,
-    QuestionEditComponent,
 
-    AnswerListComponent,
-    AnswerEditComponent,
+  { path: 'question/create/:id', component: QuestionEditComponent },
+  { path: 'question/edit/:id', component: QuestionEditComponent },
 
-    ResultListComponent,
-    ResultEditComponent,
+  { path: 'answer/create/:id', component: AnswerEditComponent },
+  { path: 'answer/edit/:id', component: AnswerEditComponent },
 
-    LoginComponent,
-    RegisterComponent,
-    UserMenuComponent,
+  {
+    path: 'result/create/:id', component: ResultEditComponent
+  },
+  {
+    path: 'result/edit/:id', component: ResultEditComponent
+  },
 
-    AboutComponent,
-    PageNotFoundComponent
-    //PageNotFoundComponent,
-    //CounterComponent,
-    //FetchDataComponent
-  ],
-  imports: [
-    BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
-    HttpClientModule,
-    FormsModule,
-    ReactiveFormsModule,
-    AppRoutingModule
-  ],
-  providers: [
-    AuthService,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthInterceptor,
-      multi: true
-    },
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: AuthResponseInterceptor,
-      multi: true
-    }
-  ],
-  bootstrap: [AppComponent]
-})
-export class AppModule { }
+  { path: 'login', component: LoginComponent },
+  { path: 'register', component: RegisterComponent },
+  { path: 'about', component: AboutComponent },
+  { path: '**', component: PageNotFoundComponent }
+      //{ path: 'counter', component: CounterComponent },
+      //{ path: 'fetch-data', component: FetchDataComponent },
+];
+
+
+
+export const AppRoutingModule: ModuleWithProviders = RouterModule.forRoot(routes);
