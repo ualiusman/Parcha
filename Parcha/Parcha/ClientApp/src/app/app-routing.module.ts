@@ -63,6 +63,9 @@ const routes: Routes = [
       //{ path: 'fetch-data', component: FetchDataComponent },
 ];
 
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
 
-
-export const AppRoutingModule: ModuleWithProviders = RouterModule.forRoot(routes);
