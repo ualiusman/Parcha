@@ -52,8 +52,10 @@
     <Content Include="ClientApp\src\app\components\question\question-edit.component.html" />
     <Content Include="ClientApp\src\app\components\question\question-list.component.html" />
     <Content Include="ClientApp\src\app\components\question\question-list.component.css" />
-    <Content Include="ClientApp\src\app\components\quiz\quiz-search.component.html" />
-    <Content Include="ClientApp\src\app\components\quiz\quiz-search.component.css" />
+    <Content Include="ClientApp\src\app\components\quiz\quiz-searched\quiz-searched.component.css" />
+    <Content Include="ClientApp\src\app\components\quiz\quiz-searched\quiz-searched.component.html" />
+    <Content Include="ClientApp\src\app\components\quiz\quiz-search\quiz-search.component.html" />
+    <Content Include="ClientApp\src\app\components\quiz\quiz-search\quiz-search.component.css" />
     <Content Include="ClientApp\src\app\components\quiz\quiz-edit.component.html" />
     <Content Include="ClientApp\src\app\components\quiz\quiz-edit.component.css" />
     <Content Include="ClientApp\src\app\components\quiz\quiz-list.component.css" />
@@ -103,7 +105,8 @@
     <TypeScriptCompile Include="ClientApp\src\app\components\pagenotfound\pagenotfound.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\components\question\question-edit.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\components\question\question-list.component.ts" />
-    <TypeScriptCompile Include="ClientApp\src\app\components\quiz\quiz-search.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\quiz\quiz-searched\quiz-searched.component.ts" />
+    <TypeScriptCompile Include="ClientApp\src\app\components\quiz\quiz-search\quiz-search.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\components\quiz\quiz-edit.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\components\quiz\quiz-list.component.ts" />
     <TypeScriptCompile Include="ClientApp\src\app\components\quiz\quiz.component.ts" />

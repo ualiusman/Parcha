@@ -159,5 +159,16 @@ namespace Parcha.Controllers
             random,
                 JsonSettings);
         }
+
+        [HttpGet("Search")]
+        public IActionResult Search(string text)
+        {
+            var random = DbContext.Quizzes.Where(x => x.Title.Contains(text))
+                 .OrderBy(q => Guid.NewGuid())
+                 .ToArray();
+            return new JsonResult(
+            random,
+                JsonSettings);
+        }
     }
 }

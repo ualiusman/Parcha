@@ -15,7 +15,8 @@ import { HomeComponent } from './home/home.component';
 import { QuizListComponent } from './components/quiz/quiz-list.component';
 import { QuizComponent } from './components/quiz/quiz.component';
 import { QuizEditComponent } from './components/quiz/quiz-edit.component';
-import { QuizSearchComponent } from './components/quiz/quiz-search.component';
+import { QuizSearchComponent } from './components/quiz/quiz-search/quiz-search.component';
+import { QuizSearchedComponent } from './components/quiz/quiz-searched/quiz-searched.component';
 
 import { QuestionListComponent } from './components/question/question-list.component';import { QuestionEditComponent } from './components/question/question-edit.component';
 import { AnswerListComponent } from './components/answer/answer-list.component';
@@ -41,6 +42,7 @@ import { AppRoutingModule } from "./app-routing.module";
     QuizComponent,
     QuizEditComponent,
     QuizSearchComponent,
+    QuizSearchedComponent,
 
     QuestionListComponent,
     QuestionEditComponent,

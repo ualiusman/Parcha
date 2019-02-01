@@ -33,7 +33,6 @@ export class QuizListComponent implements OnInit {
     var url = this.baseUrl + "api/quiz/";
     switch (this.class) {
       case "latest":
-      default:
         this.title = "Latest Quizzes";
         url += "Latest/";
         break;
@@ -44,6 +43,11 @@ export class QuizListComponent implements OnInit {
       case "random":
         this.title = "Random Quizzes";
         url += "Random/";
+        break;
+      default: 
+        this.title = "seached";
+        url += "Search?text=" + this.class + "";
+      
         break;
     }
     this.http.get<Quiz[]>(url).subscribe(result => {
